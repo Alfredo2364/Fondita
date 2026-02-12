@@ -1,8 +1,11 @@
 {
-    "docs": "This file represents the structure of the Cloud Firestore Database for the Fondita project.",
+    "docs": "This file represents the complete structure of the Cloud Firestore Database for the Fondita Restaurant Management System.",
+    "version": "2.0",
+    "lastUpdated": "2026-02-11",
     "collections": {
         "users": {
-            "docId": "uid (from Authentication)",
+            "docId": "uid (from Firebase Authentication)",
+            "description": "User accounts for admins, staff, and customers",
             "fields": {
                 "name": "string",
                 "email": "string",
@@ -13,6 +16,7 @@
         },
         "restaurants": {
             "docId": "auto-generated",
+            "description": "Restaurant information (multi-tenant support)",
             "fields": {
                 "name": "string",
                 "address": "string",
@@ -22,74 +26,196 @@
         },
         "tables": {
             "docId": "auto-generated",
+            "description": "Restaurant tables with position for visual map",
             "fields": {
                 "restaurantId": "string (reference to restaurants)",
                 "number": "number",
                 "capacity": "number",
                 "status": "string ('available', 'occupied', 'reserved')",
-                "currentOrderId": "string (nullable, reference to orders)"
+                "currentOrderId": "string (nullable, reference to orders)",
+                "x": "number (optional, position X for visual map)",
+                "y": "number (optional, position Y for visual map)"
             }
         },
-        "menu_items": {
+        "categories": {
             "docId": "auto-generated",
+            "description": "Menu categories",
+            "fields": {
+                "name": "string",
+                "restaurantId": "string (reference to restaurants)",
+                "createdAt": "timestamp"
+            }
+        },
+        "dishes": {
+            "docId": "auto-generated",
+            "description": "Menu items (formerly menu_items)",
             "fields": {
                 "restaurantId": "string (reference to restaurants)",
                 "name": "string",
                 "description": "string",
                 "price": "number",
-                "categoryId": "string",
-                "imageUrl": "string",
-                "isAvailable": "boolean"
-            }
-        },
-        "categories": {
-            "docId": "auto-generated",
-            "fields": {
-                "name": "string",
-                "restaurantId": "string"
-            }
-        },
-        "sales": {
-            "docId": "auto-generated",
-            "fields": {
-                "restaurantId": "string (reference to restaurants)",
-                "employeeId": "string (reference to users - who closed the sale)",
-                "tableId": "string (reference to tables)",
-                "total": "number",
-                "paymentMethod": "string ('cash', 'card')",
-                "timestamp": "timestamp",
-                "items": [
+                "categoryId": "string (reference to categories)",
+                "imageUrl": "string (optional)",
+                "isAvailable": "boolean",
+                "recipe": "array (optional, ingredients for inventory tracking)",
+                "recipeItems": [
                     {
-                        "menuItemId": "string",
-                        "name": "string",
-                        "quantity": "number",
-                        "unitPrice": "number",
-                        "subtotal": "number"
+                        "ingredientId": "string (reference to inventory)",
+                        "quantity": "number"
                     }
                 ]
             }
         },
-        "inventory_items": {
+        "orders": {
             "docId": "auto-generated",
+            "description": "Customer orders from POS or mobile app",
             "fields": {
-                "restaurantId": "string",
+                "restaurantId": "string (reference to restaurants)",
+                "items": [
+                    {
+                        "dishId": "string (reference to dishes)",
+                        "name": "string",
+                        "quantity": "number",
+                        "price": "number"
+                    }
+                ],
+                "total": "number",
+                "discount": "number (optional, from coupons)",
+                "couponCode": "string (optional, applied coupon)",
+                "tableNumber": "string or number",
+                "status": "string ('pending', 'cooking', 'ready', 'delivered')",
+                "paymentMethod": "string ('cash', 'card')",
+                "createdAt": "timestamp",
+                "updatedAt": "timestamp (optional)"
+            }
+        },
+        "inventory": {
+            "docId": "auto-generated",
+            "description": "Inventory items (ingredients and supplies)",
+            "fields": {
+                "restaurantId": "string (reference to restaurants)",
                 "name": "string",
-                "unit": "string ('kg', 'lt', 'unit')",
+                "unit": "string ('kg', 'lt', 'pz', 'g', 'ml')",
                 "currentStock": "number",
                 "minStock": "number (alert threshold)",
-                "cost": "number (cost per unit)"
+                "cost": "number (cost per unit)",
+                "createdAt": "timestamp"
+            }
+        },
+        "expenses": {
+            "docId": "auto-generated",
+            "description": "Business expenses (petty cash, purchases, etc.)",
+            "fields": {
+                "restaurantId": "string (reference to restaurants)",
+                "amount": "number",
+                "description": "string",
+                "category": "string (optional: 'supplies', 'utilities', 'other')",
+                "registeredBy": "string (user uid)",
+                "registeredByName": "string (user name)",
+                "createdAt": "timestamp"
+            }
+        },
+        "attendance": {
+            "docId": "auto-generated",
+            "description": "Employee attendance records (check-in/check-out)",
+            "fields": {
+                "userId": "string (reference to users)",
+                "userName": "string",
+                "restaurantId": "string (reference to restaurants)",
+                "startTime": "timestamp",
+                "endTime": "timestamp (optional, null if still active)",
+                "duration": "number (optional, in minutes)",
+                "date": "string (YYYY-MM-DD for querying)"
+            }
+        },
+        "tips": {
+            "docId": "auto-generated",
+            "description": "Tips received by employees",
+            "fields": {
+                "restaurantId": "string (reference to restaurants)",
+                "amount": "number",
+                "source": "string ('cash', 'card')",
+                "employeeId": "string (optional, reference to users)",
+                "employeeName": "string (optional)",
+                "salesId": "string (optional, reference to orders)",
+                "registeredBy": "string (user uid who registered the tip)",
+                "createdAt": "timestamp"
+            }
+        },
+        "coupons": {
+            "docId": "auto-generated",
+            "description": "Promotional discount coupons",
+            "fields": {
+                "code": "string (unique, uppercase)",
+                "description": "string",
+                "discountType": "string ('percentage', 'fixed')",
+                "value": "number (percentage 0-100 or fixed amount)",
+                "active": "boolean",
+                "restaurantId": "string (optional, reference to restaurants)",
+                "createdAt": "timestamp",
+                "expiresAt": "timestamp (optional)"
             }
         },
         "inventory_logs": {
             "docId": "auto-generated",
-            "description": "Tracks stock changes (e.g., -1 burger patty when sold, +50 when bought)",
+            "description": "Historical log of inventory changes",
             "fields": {
-                "restaurantId": "string",
-                "itemId": "string (reference to inventory_items)",
-                "changeAmount": "number",
-                "reason": "string ('sale', 'restock', 'waste')",
+                "restaurantId": "string (reference to restaurants)",
+                "itemId": "string (reference to inventory)",
+                "itemName": "string",
+                "changeAmount": "number (positive for additions, negative for subtractions)",
+                "reason": "string ('sale', 'restock', 'waste', 'adjustment')",
+                "relatedOrderId": "string (optional, reference to orders)",
                 "timestamp": "timestamp"
             }
         }
+    },
+    "indexes": {
+        "recommended": [
+            {
+                "collection": "orders",
+                "fields": [
+                    "restaurantId",
+                    "status",
+                    "createdAt"
+                ]
+            },
+            {
+                "collection": "attendance",
+                "fields": [
+                    "restaurantId",
+                    "date",
+                    "userId"
+                ]
+            },
+            {
+                "collection": "expenses",
+                "fields": [
+                    "restaurantId",
+                    "createdAt"
+                ]
+            },
+            {
+                "collection": "inventory",
+                "fields": [
+                    "restaurantId",
+                    "currentStock"
+                ]
+            },
+            {
+                "collection": "coupons",
+                "fields": [
+                    "code",
+                    "active"
+                ]
+            }
+        ]
+    },
+    "notes": {
+        "authentication": "User authentication is handled by Firebase Authentication. User documents in Firestore are created after successful authentication.",
+        "multiTenant": "The system supports multiple restaurants using the 'restaurantId' field. Current implementation uses 'default_restaurant' as a placeholder.",
+        "realtime": "Orders collection uses real-time listeners for kitchen display updates.",
+        "storage": "Dish images are stored in Firebase Storage and referenced by URL in the 'dishes' collection.",
+        "adminSDK": "User creation with password requires Firebase Admin SDK configured on the server (Next.js API Routes)."
     }
 }

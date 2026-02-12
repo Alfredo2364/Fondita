@@ -1,5 +1,5 @@
 import { db } from './firebase';
-import { collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy } from 'firebase/firestore';
+import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, where, orderBy } from 'firebase/firestore';
 import { Table } from '@/types';
 
 export const getTables = async (restaurantId: string): Promise<Table[]> => {
@@ -23,4 +23,8 @@ export const addTable = async (restaurantId: string, number: number, capacity: n
 
 export const deleteTable = async (id: string) => {
     await deleteDoc(doc(db, 'tables', id));
+};
+
+export const updateTablePosition = async (id: string, x: number, y: number) => {
+    await updateDoc(doc(db, 'tables', id), { x, y });
 };

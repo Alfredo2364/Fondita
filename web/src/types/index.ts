@@ -33,6 +33,8 @@ export interface Table {
     status: 'available' | 'occupied' | 'reserved';
     currentOrderId?: string;
     restaurantId: string;
+    x?: number;
+    y?: number;
 }
 
 export interface InventoryItem {

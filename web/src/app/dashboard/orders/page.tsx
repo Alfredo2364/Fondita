@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { subscribeToOrders, updateOrderStatus } from '@/lib/firebase/firestore';
 import { Order } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 export default function OrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);

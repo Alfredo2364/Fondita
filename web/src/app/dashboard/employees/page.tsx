@@ -6,6 +6,8 @@ import { User } from '@/types';
 import { UserPlusIcon, EllipsisVerticalIcon, ShieldCheckIcon, UserIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
 
+export const dynamic = 'force-dynamic';
+
 export default function EmployeesPage() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
@@ -14,7 +16,9 @@ export default function EmployeesPage() {
     // New User Form State
     const [newName, setNewName] = useState('');
     const [newEmail, setNewEmail] = useState('');
+    const [newPassword, setNewPassword] = useState('');
     const [newRole, setNewRole] = useState<'admin' | 'staff'>('staff');
+    const [creating, setCreating] = useState(false);
 
     useEffect(() => {
         loadUsers();
@@ -29,15 +33,37 @@ export default function EmployeesPage() {
 
     const handleCreateUser = async (e: React.FormEvent) => {
         e.preventDefault();
+        setCreating(true);
         try {
-            await createUserDoc(newEmail, newRole, newName);
+            // Llamar a la API route que usa Firebase Admin SDK
+            const response = await fetch('/api/users/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: newEmail,
+                    password: newPassword,
+                    name: newName,
+                    role: newRole
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Error al crear usuario');
+            }
+
+            alert('✅ Usuario creado exitosamente. Ya puede iniciar sesión.');
             setIsModalOpen(false);
             setNewName('');
             setNewEmail('');
+            setNewPassword('');
             loadUsers(); // Refresh list
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert('Error al crear empleado');
+            alert('❌ ' + error.message);
+        } finally {
+            setCreating(false);
         }
     };
 
@@ -108,8 +134,8 @@ export default function EmployeesPage() {
 
                             <div className="flex items-center gap-4 mb-4">
                                 <div className={`h-16 w-16 rounded-2xl flex items-center justify-center text-2xl font-bold text-white shadow-lg ${user.role === 'admin'
-                                        ? 'bg-gradient-to-br from-purple-500 to-pink-500 shadow-purple-500/30'
-                                        : 'bg-gradient-to-br from-blue-400 to-cyan-500 shadow-blue-500/30'
+                                    ? 'bg-gradient-to-br from-purple-500 to-pink-500 shadow-purple-500/30'
+                                    : 'bg-gradient-to-br from-blue-400 to-cyan-500 shadow-blue-500/30'
                                     }`}>
                                     {user.name ? user.name.charAt(0).toUpperCase() : <UserIcon className="h-8 w-8" />}
                                 </div>
@@ -125,8 +151,8 @@ export default function EmployeesPage() {
                                     <button
                                         onClick={() => handleRoleChange(user.uid, 'admin')}
                                         className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${user.role === 'admin'
-                                                ? 'bg-white dark:bg-zinc-700 text-purple-600 shadow-sm'
-                                                : 'text-gray-400 hover:text-gray-600'
+                                            ? 'bg-white dark:bg-zinc-700 text-purple-600 shadow-sm'
+                                            : 'text-gray-400 hover:text-gray-600'
                                             }`}
                                     >
                                         Admin
@@ -134,8 +160,8 @@ export default function EmployeesPage() {
                                     <button
                                         onClick={() => handleRoleChange(user.uid, 'staff')}
                                         className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${user.role === 'staff'
-                                                ? 'bg-white dark:bg-zinc-700 text-blue-500 shadow-sm'
-                                                : 'text-gray-400 hover:text-gray-600'
+                                            ? 'bg-white dark:bg-zinc-700 text-blue-500 shadow-sm'
+                                            : 'text-gray-400 hover:text-gray-600'
                                             }`}
                                     >
                                         Staff
@@ -195,6 +221,18 @@ export default function EmployeesPage() {
                                     />
                                 </div>
                                 <div>
+                                    <label className="text-sm font-bold text-gray-500">Contraseña (mínimo 6 caracteres)</label>
+                                    <input
+                                        type="password"
+                                        className="w-full mt-1 px-4 py-3 rounded-xl bg-gray-50 dark:bg-zinc-800 border-none focus:ring-2 focus:ring-indigo-500 dark:text-white"
+                                        value={newPassword}
+                                        onChange={e => setNewPassword(e.target.value)}
+                                        required
+                                        minLength={6}
+                                        placeholder="••••••"
+                                    />
+                                </div>
+                                <div>
                                     <label className="text-sm font-bold text-gray-500">Rol Inicial</label>
                                     <div className="grid grid-cols-2 gap-3 mt-1">
                                         <button
@@ -215,9 +253,10 @@ export default function EmployeesPage() {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-full py-4 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-black font-black text-lg hover:opacity-90 transition-opacity mt-4"
+                                    disabled={creating}
+                                    className="w-full py-4 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-black font-black text-lg hover:opacity-90 transition-opacity mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Guardar Empleado
+                                    {creating ? 'Creando...' : 'Guardar Empleado'}
                                 </button>
                             </form>
                         </motion.div>

@@ -12,6 +12,7 @@ import { Table } from '@/types';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useReactToPrint } from 'react-to-print';
 import { ClientTicket, KitchenTicket } from '@/components/Ticket';
+import { validateCoupon, Coupon } from '@/lib/firebase/promos';
 import {
     BanknotesIcon,
     PrinterIcon,
@@ -21,6 +22,8 @@ import {
     CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
+
+export const dynamic = 'force-dynamic';
 
 export default function POSPage() {
     const { user } = useAuthStore();
@@ -40,6 +43,11 @@ export default function POSPage() {
     const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
     const [expenseAmount, setExpenseAmount] = useState('');
     const [expenseDesc, setExpenseDesc] = useState('');
+
+    // Promos & Loyalty
+    const [couponCode, setCouponCode] = useState('');
+    const [activeCoupon, setActiveCoupon] = useState<Coupon | null>(null);
+    const [loyaltyPoints, setLoyaltyPoints] = useState(0);
 
     // Last Order for Printing
     const [lastOrder, setLastOrder] = useState<any>(null);
@@ -105,7 +113,35 @@ export default function POSPage() {
         }
     };
 
-    const total = cart.reduce((sum, item) => sum + (item.dish.price * item.quantity), 0);
+    const subtotal = cart.reduce((sum, item) => sum + (item.dish.price * item.quantity), 0);
+
+    // Calculate Discount
+    let discount = 0;
+    if (activeCoupon) {
+        if (activeCoupon.discountType === 'percentage') {
+            discount = (subtotal * activeCoupon.value) / 100;
+        } else {
+            discount = activeCoupon.value;
+        }
+    }
+    const total = Math.max(0, subtotal - discount);
+
+    // Calculate Points (Mock: 1 point per $10)
+    useEffect(() => {
+        setLoyaltyPoints(Math.floor(total / 10));
+    }, [total]);
+
+    const handleApplyCoupon = async () => {
+        if (!couponCode) return;
+        const coupon = await validateCoupon(couponCode);
+        if (coupon) {
+            setActiveCoupon(coupon);
+            alert(`Cupón aplicado: ${coupon.description}`);
+        } else {
+            alert('Cupón no válido o expirado');
+            setActiveCoupon(null);
+        }
+    };
 
     const handleCheckout = async () => {
         if (cart.length === 0) return;
@@ -120,6 +156,8 @@ export default function POSPage() {
                     price: i.dish.price
                 })),
                 total,
+                discount,
+                couponCode: activeCoupon?.code || null,
                 tableNumber: tableNum,
                 status: 'pending',
                 paymentMethod: 'cash',
@@ -313,9 +351,43 @@ export default function POSPage() {
                 </div>
 
                 <div className="p-6 bg-white dark:bg-zinc-900 border-t border-gray-100 dark:border-zinc-800 rounded-b-3xl">
-                    <div className="flex justify-between items-end mb-4">
-                        <span className="text-gray-500 font-medium">Total a Pagar</span>
-                        <span className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">${total.toFixed(2)}</span>
+                    <div className="space-y-2 mb-4">
+                        <div className="flex justify-between text-gray-400 text-sm">
+                            <span>Subtotal</span>
+                            <span>${subtotal.toFixed(2)}</span>
+                        </div>
+
+                        {/* Coupon Input */}
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                value={couponCode}
+                                onChange={e => setCouponCode(e.target.value)}
+                                placeholder="CÓDIGO CUPÓN"
+                                className="flex-1 bg-gray-50 dark:bg-zinc-800 rounded-lg px-3 py-2 text-xs font-bold uppercase outline-none focus:ring-2 focus:ring-purple-500"
+                            />
+                            <button
+                                onClick={handleApplyCoupon}
+                                className="bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-300 px-3 rounded-lg font-bold text-xs hover:bg-purple-200"
+                            >
+                                APLICAR
+                            </button>
+                        </div>
+
+                        {activeCoupon && (
+                            <div className="flex justify-between text-purple-500 text-sm font-bold">
+                                <span>Descuento ({activeCoupon.code})</span>
+                                <span>-${discount.toFixed(2)}</span>
+                            </div>
+                        )}
+
+                        <div className="flex justify-between items-end pt-2 border-t border-gray-100 dark:border-zinc-800">
+                            <div>
+                                <span className="text-gray-500 font-medium block">Total a Pagar</span>
+                                <span className="text-xs text-orange-500 font-bold">GANAS +{loyaltyPoints} PUNTOS</span>
+                            </div>
+                            <span className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">${total.toFixed(2)}</span>
+                        </div>
                     </div>
 
                     <button

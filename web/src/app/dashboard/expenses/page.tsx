@@ -8,6 +8,8 @@ import { BanknotesIcon, TrashIcon, PlusIcon, CalendarIcon } from '@heroicons/rea
 
 const RESTAURANT_ID = 'default_restaurant';
 
+export const dynamic = 'force-dynamic';
+
 export default function ExpensesPage() {
     const { user } = useAuthStore();
     const [expenses, setExpenses] = useState<Expense[]>([]);

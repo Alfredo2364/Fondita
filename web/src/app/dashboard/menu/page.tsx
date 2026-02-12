@@ -9,6 +9,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const RESTAURANT_ID = 'default_restaurant';
 
+export const dynamic = 'force-dynamic';
+
 export default function MenuPage() {
     const [dishes, setDishes] = useState<Dish[]>([]);
     const [inventory, setInventory] = useState<InventoryItem[]>([]);

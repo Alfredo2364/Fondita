@@ -2,45 +2,59 @@
 
 import { useState, useEffect } from 'react';
 import { getSales } from '@/lib/firebase/sales';
+import { getExpenses, Expense } from '@/lib/firebase/expenses';
 import { Sale } from '@/types';
-import { CurrencyDollarIcon, PresentationChartLineIcon, ShoppingBagIcon } from '@heroicons/react/24/outline';
+import { CurrencyDollarIcon, PresentationChartLineIcon, ShoppingBagIcon, BanknotesIcon, ChartPieIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const RESTAURANT_ID = 'default_restaurant';
 
+export const dynamic = 'force-dynamic';
+
 export default function ReportsPage() {
     const [sales, setSales] = useState<Sale[]>([]);
+    const [expenses, setExpenses] = useState<Expense[]>([]);
     const [loading, setLoading] = useState(true);
 
     // Stats
     const [totalRevenue, setTotalRevenue] = useState(0);
+    const [totalExpenses, setTotalExpenses] = useState(0);
+    const [netProfit, setNetProfit] = useState(0);
     const [totalOrders, setTotalOrders] = useState(0);
     const [ticketAverage, setTicketAverage] = useState(0);
 
-    useEffect(() => {
-        loadSales();
-    }, []);
+    const calculateStats = (salesData: Sale[], expensesData: Expense[]) => {
+        const revenue = salesData.reduce((acc, sale) => acc + sale.total, 0);
+        const expenseTotal = expensesData.reduce((acc, exp) => acc + exp.amount, 0);
+        const count = salesData.length;
+
+        setTotalRevenue(revenue);
+        setTotalExpenses(expenseTotal);
+        setNetProfit(revenue - expenseTotal);
+        setTotalOrders(count);
+        setTicketAverage(count > 0 ? revenue / count : 0);
+    };
 
     const loadSales = async () => {
         setLoading(true);
         try {
-            const data = await getSales(RESTAURANT_ID);
-            setSales(data);
-            calculateStats(data);
+            const [salesData, expensesData] = await Promise.all([
+                getSales(RESTAURANT_ID),
+                getExpenses(RESTAURANT_ID)
+            ]);
+            setSales(salesData);
+            setExpenses(expensesData);
+            calculateStats(salesData, expensesData);
         } catch (error) {
-            console.error('Error loading sales:', error);
+            console.error('Error loading data:', error);
         } finally {
             setLoading(false);
         }
     };
 
-    const calculateStats = (data: Sale[]) => {
-        const total = data.reduce((acc, sale) => acc + sale.total, 0);
-        const count = data.length;
-        setTotalRevenue(total);
-        setTotalOrders(count);
-        setTicketAverage(count > 0 ? total / count : 0);
-    };
+    useEffect(() => {
+        loadSales();
+    }, []);
 
     return (
         <div className="p-8 bg-gray-50 dark:bg-zinc-950 min-h-screen font-sans overflow-hidden relative">
@@ -64,16 +78,36 @@ export default function ReportsPage() {
             </motion.div>
 
             {/* 3D KPI Cards */}
-            <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 mb-10 perspective-1000">
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-10 perspective-1000">
                 <StatCard
                     title="Ventas Totales"
-                    value={`$${totalRevenue.toFixed(2)}`}
+                    value={`$${totalRevenue.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`}
                     icon={CurrencyDollarIcon}
                     color="text-green-600 dark:text-green-400"
                     bgColor="bg-green-50 dark:bg-green-900/20"
                     borderColor="border-green-100 dark:border-green-800/50"
                     shadowColor="shadow-green-500/20"
                     index={0}
+                />
+                <StatCard
+                    title="Gastos Totales"
+                    value={`$${totalExpenses.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`}
+                    icon={BanknotesIcon}
+                    color="text-red-600 dark:text-red-400"
+                    bgColor="bg-red-50 dark:bg-red-900/20"
+                    borderColor="border-red-100 dark:border-red-800/50"
+                    shadowColor="shadow-red-500/20"
+                    index={1}
+                />
+                <StatCard
+                    title="Ganancia Neta"
+                    value={`$${netProfit.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`}
+                    icon={ChartPieIcon}
+                    color="text-indigo-600 dark:text-indigo-400"
+                    bgColor="bg-indigo-50 dark:bg-indigo-900/20"
+                    borderColor="border-indigo-100 dark:border-indigo-800/50"
+                    shadowColor="shadow-indigo-500/20"
+                    index={2}
                 />
                 <StatCard
                     title="Pedidos Totales"
@@ -83,17 +117,17 @@ export default function ReportsPage() {
                     bgColor="bg-blue-50 dark:bg-blue-900/20"
                     borderColor="border-blue-100 dark:border-blue-800/50"
                     shadowColor="shadow-blue-500/20"
-                    index={1}
+                    index={3}
                 />
                 <StatCard
                     title="Ticket Promedio"
-                    value={`$${ticketAverage.toFixed(2)}`}
+                    value={`$${ticketAverage.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`}
                     icon={PresentationChartLineIcon}
                     color="text-purple-600 dark:text-purple-400"
                     bgColor="bg-purple-50 dark:bg-purple-900/20"
                     borderColor="border-purple-100 dark:border-purple-800/50"
                     shadowColor="shadow-purple-500/20"
-                    index={2}
+                    index={4}
                 />
             </div>
 
