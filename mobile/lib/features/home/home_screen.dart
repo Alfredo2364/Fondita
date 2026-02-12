@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../core/services/firestore_service.dart';
-import '../../core/models/menu_models.dart';
 import '../../core/providers/cart_provider.dart';
 import '../cart/cart_screen.dart';
 
