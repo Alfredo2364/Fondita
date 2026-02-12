@@ -1,0 +1,84 @@
+{
+    "docs": "This file represents the structure of the Cloud Firestore Database for the Fondita project.",
+    "collections": {
+        "users": {
+            "docId": "uid (from Authentication)",
+            "fields": {
+                "name": "string",
+                "email": "string",
+                "role": "string ('admin', 'staff', 'customer')",
+                "createdAt": "timestamp",
+                "restaurantId": "string (reference to restaurants)"
+            }
+        },
+        "restaurants": {
+            "docId": "auto-generated",
+            "fields": {
+                "name": "string",
+                "address": "string",
+                "ownerId": "string (reference to users)",
+                "createdAt": "timestamp"
+            }
+        },
+        "tables": {
+            "docId": "auto-generated",
+            "fields": {
+                "restaurantId": "string (reference to restaurants)",
+                "number": "number",
+                "capacity": "number",
+                "status": "string ('available', 'occupied', 'reserved')",
+                "currentOrderId": "string (nullable, reference to orders)"
+            }
+        },
+        "menu_items": {
+            "docId": "auto-generated",
+            "fields": {
+                "restaurantId": "string (reference to restaurants)",
+                "name": "string",
+                "description": "string",
+                "price": "number",
+                "categoryId": "string",
+                "imageUrl": "string",
+                "isAvailable": "boolean"
+            }
+        },
+        "categories": {
+            "docId": "auto-generated",
+            "fields": {
+                "name": "string",
+                "restaurantId": "string"
+            }
+        },
+        "sales": {
+            "docId": "auto-generated",
+            "fields": {
+                "restaurantId": "string (reference to restaurants)",
+                "employeeId": "string (reference to users - who closed the sale)",
+                "tableId": "string (reference to tables)",
+                "total": "number",
+                "paymentMethod": "string ('cash', 'card')",
+                "timestamp": "timestamp",
+                "items": [
+                    {
+                        "menuItemId": "string",
+                        "name": "string",
+                        "quantity": "number",
+                        "unitPrice": "number",
+                        "subtotal": "number"
+                    }
+                ]
+            }
+        },
+        "inventory_logs": {
+            "docId": "auto-generated",
+            "description": "Tracks stock changes (e.g., -1 burger patty when sold, +50 when bought)",
+            "fields": {
+                "restaurantId": "string",
+                "itemId": "string (reference to inventory_items)",
+                "changeAmount": "number",
+                "reason": "string ('sale', 'restock', 'waste')",
+                "timestamp": "timestamp"
+            }
+        }
+    }
+}
