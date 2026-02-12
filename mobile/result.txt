@@ -1,0 +1,5 @@
+Analyzing mobile...                                             
+
+   info - Don't use 'BuildContext's across async gaps - lib\features\cart\cart_screen.dart:87:52 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\features\cart\cart_screen.dart:95:52 - use_build_context_synchronously
+

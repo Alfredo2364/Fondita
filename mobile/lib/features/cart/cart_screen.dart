@@ -84,17 +84,21 @@ class CartScreen extends ConsumerWidget {
                                   .read(firestoreServiceProvider)
                                   .placeOrder(orderData);
 
+                              if (!context.mounted) return;
+
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Pedido enviado a cocina'),
                                 ),
                               );
                               cartNotifier.clearCart();
-                              if (context.mounted) Navigator.pop(context);
+                              Navigator.pop(context);
                             } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Error al pedir: $e')),
-                              );
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Error al pedir: $e')),
+                                );
+                              }
                             }
                           },
                           child: const Text('Confirmar Pedido'),

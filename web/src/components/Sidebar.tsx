@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import { auth } from '@/lib/firebase/firebase';
 import {
@@ -24,48 +24,73 @@ const navigation = [
 
 export default function Sidebar() {
     const pathname = usePathname();
-    const { user } = useAuthStore();
+    const router = useRouter();
+    const { user, role, setUser } = useAuthStore();
+
+    const handleLogout = async () => {
+        await auth.signOut();
+        setUser(null, null);
+        router.push('/login');
+    };
+
+    const filteredNavigation = navigation.filter(item => {
+        if (role === 'admin') return true;
+        if (role === 'staff') {
+            return ['Dashboard', 'Cocina (Pedidos)', 'Punto de Venta (POS)'].includes(item.name);
+        }
+        return false;
+    });
 
     return (
-        <div className="flex h-full w-64 flex-col bg-white shadow-lg dark:bg-zinc-800">
-            <div className="flex h-16 items-center justify-center border-b dark:border-zinc-700">
-                <h1 className="text-xl font-bold text-[var(--primary)]">Fondita Admin</h1>
+        <div className="flex h-full w-64 flex-col border-r bg-white dark:bg-zinc-900 dark:border-zinc-800">
+            <div className="flex h-16 items-center justify-center border-b px-4 dark:border-zinc-800">
+                <h1 className="text-xl font-bold text-[var(--primary)] text-center">
+                    Fondita {role === 'admin' ? '(Jefe)' : role === 'staff' ? '(Personal)' : ''}
+                </h1>
             </div>
-            <div className="flex-1 overflow-y-auto py-4">
-                <nav className="space-y-1 px-2">
-                    {navigation.map((item) => {
-                        const isActive = pathname === item.href;
-                        return (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className={`group flex items-center rounded-md px-2 py-2 text-sm font-medium ${isActive
+
+            <nav className="flex-1 space-y-1 px-2 py-4">
+                {filteredNavigation.map((item) => {
+                    const isActive = pathname === item.href;
+                    return (
+                        <Link
+                            key={item.name}
+                            href={item.href}
+                            className={`group flex items-center rounded-md px-2 py-2 text-sm font-medium ${isActive
                                     ? 'bg-[var(--primary)] text-white'
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-zinc-700 dark:hover:text-white'
+                                }`}
+                        >
+                            <item.icon
+                                className={`mr-3 h-6 w-6 flex-shrink-0 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-400'
                                     }`}
-                            >
-                                {/* Placeholder Icons */}
-                                <span className="mr-3 h-6 w-6 text-center">{item.icon === 'home' ? '🏠' : item.icon === 'menu' ? '🍔' : item.icon === 'clipboard' ? '📋' : '⚙️'}</span>
-                                {item.name}
-                            </Link>
-                        );
-                    })}
-                </nav>
-            </div>
+                                aria-hidden="true"
+                            />
+                            {item.name}
+                        </Link>
+                    );
+                })}
+            </nav>
+
             <div className="border-t p-4 dark:border-zinc-700">
                 <div className="flex items-center">
+                    <UserCircleIcon className="h-9 w-9 text-gray-400" aria-hidden="true" />
                     <div className="ml-3">
                         <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
                             {user?.email}
                         </p>
-                        <button
-                            onClick={() => auth.signOut()}
-                            className="text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                        >
-                            Cerrar Sesión
-                        </button>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                            {role}
+                        </p>
                     </div>
                 </div>
+                <button
+                    onClick={handleLogout}
+                    className="mt-4 flex w-full items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-gray-200 dark:hover:bg-zinc-700"
+                >
+                    <ArrowLeftOnRectangleIcon className="mr-2 h-4 w-4" />
+                    Cerrar Sesión
+                </button>
             </div>
         </div>
     );

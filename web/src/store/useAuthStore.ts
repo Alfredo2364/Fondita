@@ -2,15 +2,17 @@ import { create } from 'zustand';
 import { User } from 'firebase/auth';
 
 interface AuthState {
-    user: User | null;
-    loading: boolean;
-    setUser: (user: User | null) => void;
-    setLoading: (loading: boolean) => void;
+  user: User | null;
+  role: 'admin' | 'staff' | 'customer' | null; // Add role
+  loading: boolean;
+  setUser: (user: User | null, role?: 'admin' | 'staff' | 'customer' | null) => void;
+  setLoading: (loading: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-    user: null,
-    loading: true,
-    setUser: (user) => set({ user }),
-    setLoading: (loading) => set({ loading }),
+  user: null,
+  role: null,
+  loading: true,
+  setUser: (user, role = null) => set({ user, role }),
+  setLoading: (loading) => set({ loading }),
 }));
