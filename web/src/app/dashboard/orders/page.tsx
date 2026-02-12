@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { subscribeToOrders, updateOrderStatus, Order } from '@/lib/firebase/firestore';
+import { subscribeToOrders, updateOrderStatus } from '@/lib/firebase/firestore';
+import { Order } from '@/types';
 
 export default function OrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);

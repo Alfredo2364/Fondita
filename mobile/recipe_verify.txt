@@ -1,0 +1,8 @@
+Analyzing mobile...                                             
+
+   info - Unnecessary use of multiple underscores - lib\core\providers\auth_provider.dart:31:16 - unnecessary_underscores
+   info - Statements in an if should be enclosed in a block - lib\core\services\firestore_service.dart:72:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\table\table_detail_screen.dart:74:23 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\table\table_detail_screen.dart:79:23 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\table\table_detail_screen.dart:219:9 - curly_braces_in_flow_control_structures
+

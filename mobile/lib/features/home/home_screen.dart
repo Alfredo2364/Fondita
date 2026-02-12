@@ -6,7 +6,10 @@ import '../../core/providers/cart_provider.dart';
 import '../cart/cart_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+  final String? tableId;
+  final int? tableNumber;
+
+  const HomeScreen({super.key, this.tableId, this.tableNumber});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,7 +18,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Menú'),
+        title: Text(tableNumber != null ? 'Mesa $tableNumber - Menú' : 'Menú'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -82,13 +85,13 @@ class HomeScreen extends ConsumerWidget {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text('${dish.name} agregado'),
+                                        duration: const Duration(
+                                          milliseconds: 500,
+                                        ),
                                       ),
                                     );
                                   },
                                 ),
-                                onTap: () {
-                                  // Detail view logic
-                                },
                               ),
                             );
                           },
@@ -114,7 +117,10 @@ class HomeScreen extends ConsumerWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const CartScreen()),
+                MaterialPageRoute(
+                  builder: (_) =>
+                      CartScreen(tableId: tableId, tableNumber: tableNumber),
+                ),
               );
             },
             label: Text('Ver Pedido (${cartItems.length})'),

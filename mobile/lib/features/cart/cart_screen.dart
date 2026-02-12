@@ -4,7 +4,10 @@ import '../../core/providers/cart_provider.dart';
 import '../../core/services/firestore_service.dart';
 
 class CartScreen extends ConsumerWidget {
-  const CartScreen({super.key});
+  final String? tableId;
+  final int? tableNumber;
+
+  const CartScreen({super.key, this.tableId, this.tableNumber});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -67,6 +70,8 @@ class CartScreen extends ConsumerWidget {
                             try {
                               final orderData = {
                                 'total': cartNotifier.total,
+                                'tableId': tableId, // Use passed tableId
+                                'tableNumber': tableNumber ?? 0,
                                 'items': cartItems
                                     .map(
                                       (i) => {
@@ -77,7 +82,6 @@ class CartScreen extends ConsumerWidget {
                                       },
                                     )
                                     .toList(),
-                                'tableNumber': '1', // Placeholder or ask user
                               };
 
                               await ref
@@ -92,7 +96,10 @@ class CartScreen extends ConsumerWidget {
                                 ),
                               );
                               cartNotifier.clearCart();
-                              Navigator.pop(context);
+                              Navigator.pop(context); // Close Cart
+                              Navigator.pop(
+                                context,
+                              ); // Close Menu (return to Table Detail or Home)
                             } catch (e) {
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(

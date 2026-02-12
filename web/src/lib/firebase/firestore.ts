@@ -13,32 +13,10 @@ import {
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+import { Dish, Category, Order } from '@/types';
+
 // Interfaces
-export interface Order {
-    id?: string;
-    items: any[];
-    total: number;
-    tableNumber: string;
-    status: 'pending' | 'cooking' | 'ready' | 'delivered';
-    createdAt?: any;
-}
-
-export interface Category {
-    id?: string;
-    name: string;
-    createdAt?: any;
-}
-
-export interface Dish {
-    id?: string;
-    name: string;
-    price: number;
-    description: string;
-    categoryId: string;
-    imageUrl?: string;
-    isAvailable: boolean;
-    createdAt?: any;
-}
+// Local interfaces removed in favor of global types from '@/types'
 
 // Categories
 export const addCategory = async (name: string) => {
@@ -55,7 +33,7 @@ export const getCategories = async (): Promise<Category[]> => {
 };
 
 // Dishes
-export const addDish = async (dish: Dish, imageFile?: File) => {
+export const addDish = async (dish: Omit<Dish, 'id'>, imageFile?: File) => {
     let imageUrl = '';
 
     if (imageFile) {

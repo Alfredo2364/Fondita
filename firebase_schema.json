@@ -69,6 +69,17 @@
                 ]
             }
         },
+        "inventory_items": {
+            "docId": "auto-generated",
+            "fields": {
+                "restaurantId": "string",
+                "name": "string",
+                "unit": "string ('kg', 'lt', 'unit')",
+                "currentStock": "number",
+                "minStock": "number (alert threshold)",
+                "cost": "number (cost per unit)"
+            }
+        },
         "inventory_logs": {
             "docId": "auto-generated",
             "description": "Tracks stock changes (e.g., -1 burger patty when sold, +50 when bought)",
