@@ -20,7 +20,9 @@ import {
     MapIcon,
     ClockIcon,
     SparklesIcon,
-    TagIcon // Added TagIcon
+    TagIcon, // Added TagIcon
+    CalendarDaysIcon,
+    ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 
 const navigation = [
@@ -29,12 +31,13 @@ const navigation = [
     { name: 'Mesas', href: '/dashboard/tables', icon: MapIcon }, // New Item
     { name: 'Cocina (Pedidos)', href: '/dashboard/orders', icon: ClipboardDocumentListIcon },
     { name: 'Punto de Venta (POS)', href: '/dashboard/pos', icon: CurrencyDollarIcon },
-    { name: 'Reportes (Jefe)', href: '/dashboard/reports', icon: ChartBarIcon },
+    { name: 'Reportes (Jefe)', href: '/dashboard/reports', icon: ChartBarIcon, roles: ['admin'] },
     { name: 'Gastos', href: '/dashboard/expenses', icon: BanknotesIcon, roles: ['admin'] }, // Added roles
     { name: 'Promociones', href: '/dashboard/promos', icon: TagIcon, roles: ['admin'] }, // Added Promociones
+    { name: 'Merma', href: '/dashboard/waste', icon: ExclamationTriangleIcon, roles: ['admin'] }, // New Item for Waste
     { name: 'Inventario (Stock)', href: '/dashboard/inventory', icon: ArchiveBoxIcon },
     { name: 'Asistencia', href: '/dashboard/attendance', icon: ClockIcon },
-    { name: 'Propinas', href: '/dashboard/tips', icon: SparklesIcon }, // New Item
+    { name: 'Propinas', href: '/dashboard/tips', icon: SparklesIcon, roles: ['admin'] }, // New Item
     { name: 'Empleados', href: '/dashboard/employees', icon: UserCircleIcon },
     { name: 'Configuración', href: '/dashboard/settings', icon: Cog6ToothIcon },
 ];
