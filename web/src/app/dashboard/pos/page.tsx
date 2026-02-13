@@ -13,6 +13,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useReactToPrint } from 'react-to-print';
 import { ClientTicket, KitchenTicket } from '@/components/Ticket';
 import { validateCoupon, Coupon } from '@/lib/firebase/promos';
+import { getOpenCashRegister, openCashRegister, addCashWithdrawal, CashRegister } from '@/lib/firebase/cash-register';
 import {
     BanknotesIcon,
     PrinterIcon,
@@ -49,6 +50,14 @@ export default function POSPage() {
     const [activeCoupon, setActiveCoupon] = useState<Coupon | null>(null);
     const [loyaltyPoints, setLoyaltyPoints] = useState(0);
 
+    // Cash Register
+    const [cashRegister, setCashRegister] = useState<CashRegister | null>(null);
+    const [isCashModalOpen, setIsCashModalOpen] = useState(false);
+    const [cashAction, setCashAction] = useState<'open' | 'withdraw'>('open');
+    const [initialFund, setInitialFund] = useState('');
+    const [withdrawAmount, setWithdrawAmount] = useState('');
+    const [withdrawReason, setWithdrawReason] = useState('');
+
     // Last Order for Printing
     const [lastOrder, setLastOrder] = useState<any>(null);
 
@@ -71,6 +80,23 @@ export default function POSPage() {
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        // Assuming loadData() is a placeholder or refers to fetchData()
+        // If loadData() is not defined elsewhere, this line will cause an error.
+        // For now, I'll keep it as provided in the instruction.
+        // If it's meant to re-fetch initial data, consider calling fetchData() again.
+        // If it's meant to be removed, please specify.
+        // For now, I'll assume it's a new function or a typo for fetchData.
+        // Given the context of adding cash register logic, it's more likely loadCashRegister() is the primary new call here.
+        // I will remove loadData() as it's not defined and likely a typo, focusing on the cash register part.
+        loadCashRegister();
+    }, []);
+
+    const loadCashRegister = async () => {
+        const register = await getOpenCashRegister('default_restaurant');
+        setCashRegister(register);
+    };
 
     useEffect(() => {
         if (lastOrder) {
@@ -196,17 +222,66 @@ export default function POSPage() {
         }
     };
 
-    const handleAddExpense = async (e: React.FormEvent) => {
+    const handleExpense = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!user) return;
         try {
-            await addExpense(parseFloat(expenseAmount), expenseDesc, user?.uid || 'unknown', user?.email || 'Staff');
+            await addExpense({
+                restaurantId: 'default_restaurant',
+                amount: parseFloat(expenseAmount),
+                description: expenseDesc,
+                registeredBy: user.uid,
+                registeredByName: user.displayName || user.email || 'Usuario'
+            });
+            alert('✅ Gasto registrado');
             setIsExpenseModalOpen(false);
             setExpenseAmount('');
             setExpenseDesc('');
-            alert('Gasto registrado');
         } catch (error) {
             console.error(error);
-            alert('Error al registrar gasto');
+            alert('❌ Error al registrar gasto');
+        }
+    };
+
+    const handleOpenCashRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!user) return;
+        try {
+            await openCashRegister({
+                restaurantId: 'default_restaurant',
+                openedBy: user.uid,
+                openedByName: user.displayName || user.email || 'Usuario',
+                initialFund: parseFloat(initialFund)
+            });
+            alert('✅ Caja abierta con fondo inicial de $' + initialFund);
+            setIsCashModalOpen(false);
+            setInitialFund('');
+            loadCashRegister();
+        } catch (error) {
+            console.error(error);
+            alert('❌ Error al abrir caja');
+        }
+    };
+
+    const handleCashWithdrawal = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!user || !cashRegister) return;
+        try {
+            await addCashWithdrawal({
+                restaurantId: 'default_restaurant',
+                registerId: cashRegister.id!,
+                amount: parseFloat(withdrawAmount),
+                reason: withdrawReason,
+                withdrawnBy: user.uid,
+                withdrawnByName: user.displayName || user.email || 'Usuario'
+            });
+            alert('✅ Retiro de $' + withdrawAmount + ' registrado');
+            setIsCashModalOpen(false);
+            setWithdrawAmount('');
+            setWithdrawReason('');
+        } catch (error) {
+            console.error(error);
+            alert('❌ Error al registrar retiro');
         }
     };
 
@@ -441,7 +516,7 @@ export default function POSPage() {
                             className="bg-white dark:bg-zinc-900 rounded-3xl p-8 w-full max-w-sm relative z-10 shadow-2xl"
                         >
                             <h2 className="text-2xl font-black text-gray-900 dark:text-white mb-6">Registrar Gasto</h2>
-                            <form onSubmit={handleAddExpense} className="space-y-4">
+                            <form onSubmit={handleExpense} className="space-y-4">
                                 <div>
                                     <label className="text-sm font-bold text-gray-500">Monto ($)</label>
                                     <input

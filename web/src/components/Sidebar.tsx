@@ -33,6 +33,7 @@ const navigation = [
     { name: 'Punto de Venta (POS)', href: '/dashboard/pos', icon: CurrencyDollarIcon },
     { name: 'Reportes (Jefe)', href: '/dashboard/reports', icon: ChartBarIcon, roles: ['admin'] },
     { name: 'Gastos', href: '/dashboard/expenses', icon: BanknotesIcon, roles: ['admin'] }, // Added roles
+    { name: 'Caja', href: '/dashboard/cash', icon: BanknotesIcon, roles: ['admin'] }, // Cash Register
     { name: 'Promociones', href: '/dashboard/promos', icon: TagIcon, roles: ['admin'] }, // Added Promociones
     { name: 'Merma', href: '/dashboard/waste', icon: ExclamationTriangleIcon, roles: ['admin'] }, // New Item for Waste
     { name: 'Inventario (Stock)', href: '/dashboard/inventory', icon: ArchiveBoxIcon },
