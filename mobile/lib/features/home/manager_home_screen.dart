@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../screens/tables_screen.dart';
+import '../../screens/attendance_screen.dart';
+import '../../screens/kitchen_display_screen.dart';
+import '../../screens/qr_scanner_screen.dart';
+import '../../screens/settings_screen.dart';
+import '../../core/theme/app_theme.dart';
 
 class ManagerHomeScreen extends ConsumerWidget {
   const ManagerHomeScreen({super.key});
@@ -10,9 +16,17 @@ class ManagerHomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Panel de Jefe'),
-        backgroundColor: Colors.purple,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.manager,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () => FirebaseAuth.instance.signOut(),
@@ -22,15 +36,39 @@ class ManagerHomeScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _buildStatCard('Ventas Hoy', '\$1,250.00', Colors.green),
-          _buildStatCard('Pedidos Activos', '5', Colors.orange),
-          _buildStatCard('Total Platillos', '24', Colors.blue),
+          _buildStatCard('Ventas Hoy', '\$1,250.00', AppColors.success),
+          _buildStatCard('Pedidos Activos', '5', AppColors.accent),
+          _buildStatCard('Total Platillos', '24', AppColors.secondary),
           const SizedBox(height: 20),
           const Text(
             'Acciones Rápidas',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
+          _buildNavigationTile(
+            context,
+            icon: Icons.table_restaurant,
+            title: 'Gestionar Mesas',
+            screen: const TablesScreen(),
+          ),
+          _buildNavigationTile(
+            context,
+            icon: Icons.restaurant_menu,
+            title: 'Vista de Cocina',
+            screen: const KitchenDisplayScreen(),
+          ),
+          _buildNavigationTile(
+            context,
+            icon: Icons.access_time,
+            title: 'Asistencia',
+            screen: const AttendanceScreen(),
+          ),
+          _buildNavigationTile(
+            context,
+            icon: Icons.qr_code_scanner,
+            title: 'Escanear QR',
+            screen: const QRScannerScreen(),
+          ),
           ListTile(
             leading: const Icon(Icons.inventory),
             title: const Text('Gestionar Inventario'),
@@ -45,6 +83,22 @@ class ManagerHomeScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildNavigationTile(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required Widget screen,
+  }) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      trailing: const Icon(Icons.arrow_forward_ios),
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
+      },
     );
   }
 

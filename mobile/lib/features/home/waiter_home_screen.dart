@@ -4,6 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/models/table_model.dart';
 import '../../features/table/table_detail_screen.dart';
+import '../../screens/attendance_screen.dart';
+import '../../screens/settings_screen.dart';
+import '../../core/theme/app_theme.dart';
 
 final tablesProvider = StreamProvider<List<TableModel>>((ref) {
   return FirebaseFirestore.instance
@@ -27,9 +30,17 @@ class WaiterHomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Modo Mesero'),
-        backgroundColor: Colors.blueAccent,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.waiter,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () => FirebaseAuth.instance.signOut(),
@@ -54,7 +65,9 @@ class WaiterHomeScreen extends ConsumerWidget {
               final isOccupied = table.status == 'occupied';
 
               return Card(
-                color: isOccupied ? Colors.red[50] : Colors.green[50],
+                color: isOccupied
+                    ? AppColors.tableOccupied.withOpacity(0.1)
+                    : AppColors.tableAvailable.withOpacity(0.1),
                 child: InkWell(
                   onTap: () {
                     Navigator.push(
@@ -70,7 +83,9 @@ class WaiterHomeScreen extends ConsumerWidget {
                       Icon(
                         Icons.table_restaurant,
                         size: 48,
-                        color: isOccupied ? Colors.red : Colors.green,
+                        color: isOccupied
+                            ? AppColors.tableOccupied
+                            : AppColors.tableAvailable,
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -83,7 +98,9 @@ class WaiterHomeScreen extends ConsumerWidget {
                       Text(
                         isOccupied ? 'Ocupada' : 'Disponible',
                         style: TextStyle(
-                          color: isOccupied ? Colors.red : Colors.green,
+                          color: isOccupied
+                              ? AppColors.tableOccupied
+                              : AppColors.tableAvailable,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -103,6 +120,17 @@ class WaiterHomeScreen extends ConsumerWidget {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, s) => Center(child: Text('Error: $e')),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AttendanceScreen()),
+          );
+        },
+        icon: const Icon(Icons.access_time),
+        label: const Text('Asistencia'),
+        backgroundColor: AppColors.accent,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import '../core/theme/app_theme.dart';
 
 class QRScannerScreen extends StatefulWidget {
   const QRScannerScreen({Key? key}) : super(key: key);
@@ -9,32 +10,29 @@ class QRScannerScreen extends StatefulWidget {
 }
 
 class _QRScannerScreenState extends State<QRScannerScreen> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? controller;
-  String? scannedCode;
+  MobileScannerController cameraController = MobileScannerController();
+  bool _scanned = false;
 
   @override
   void dispose() {
-    controller?.dispose();
+    cameraController.dispose();
     super.dispose();
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      if (scannedCode == null) {
-        setState(() {
-          scannedCode = scanData.code;
-        });
-        controller.pauseCamera();
-        _handleScannedCode(scanData.code);
-      }
-    });
-  }
+  void _handleBarcode(BarcodeCapture capture) {
+    if (_scanned) return;
 
-  void _handleScannedCode(String? code) {
+    final List<Barcode> barcodes = capture.barcodes;
+    if (barcodes.isEmpty) return;
+
+    final String? code = barcodes.first.rawValue;
     if (code == null) return;
 
+    setState(() => _scanned = true);
+    _handleScannedCode(code);
+  }
+
+  void _handleScannedCode(String code) {
     // Extraer número de mesa del código QR
     // Formato esperado: "table_1", "table_2", etc.
     if (code.startsWith('table_')) {
@@ -48,8 +46,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         ),
       );
       Future.delayed(const Duration(seconds: 2), () {
-        setState(() => scannedCode = null);
-        controller?.resumeCamera();
+        setState(() => _scanned = false);
       });
     }
   }
@@ -59,22 +56,15 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Escanear QR de Mesa'),
-        backgroundColor: Colors.purple,
+        backgroundColor: AppColors.accent,
       ),
       body: Column(
         children: [
           Expanded(
             flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                borderColor: Colors.purple,
-                borderRadius: 10,
-                borderLength: 30,
-                borderWidth: 10,
-                cutOutSize: 300,
-              ),
+            child: MobileScanner(
+              controller: cameraController,
+              onDetect: _handleBarcode,
             ),
           ),
           Expanded(
@@ -82,7 +72,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
             child: Container(
               color: Colors.white,
               child: Center(
-                child: scannedCode != null
+                child: _scanned
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -92,9 +82,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                             size: 48,
                           ),
                           const SizedBox(height: 8),
-                          Text(
-                            'Mesa escaneada: $scannedCode',
-                            style: const TextStyle(
+                          const Text(
+                            'Mesa escaneada',
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),

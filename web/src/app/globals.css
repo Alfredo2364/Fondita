@@ -1,35 +1,135 @@
 @import "tailwindcss";
 
+/* Tema Claro (Light Theme) */
 :root {
-  --background: #FFF8E1; /* Warm White */
-  --foreground: #171717;
-  --primary: #FF5722; /* Deep Orange */
-  --secondary: #4CAF50; /* Green */
-  --accent: #FFC107; /* Amber */
+  /* Colores de fondo */
+  --background: #FFFBF5; /* Crema muy claro */
+  --surface: #FFF8F0; /* Crema */
+  --card: #FFFFFF; /* Blanco */
+  
+  /* Colores de texto */
+  --foreground: #2D2D2D; /* Casi negro */
+  --foreground-secondary: #6B6B6B; /* Gris medio */
+  --foreground-light: #9E9E9E; /* Gris claro */
+  
+  /* Colores primarios - Naranja (apetito, calidez) */
+  --primary: #FF6B35; /* Naranja vibrante */
+  --primary-dark: #E85D2C;
+  --primary-light: #FF8A5B;
+  
+  /* Colores secundarios - Verde oliva (frescura) */
+  --secondary: #4A7C59; /* Verde oliva */
+  --secondary-dark: #3A6347;
+  --secondary-light: #5F9B6D;
+  
+  /* Colores de acento - Amarillo mostaza (energía) */
+  --accent: #F4A261; /* Mostaza suave */
+  --accent-dark: #E89350;
+  --accent-light: #F7B77D;
+  
+  /* Estados */
+  --success: #4CAF50;
+  --warning: #FFA726;
+  --error: #E53935;
+  --info: #42A5F5;
+  
+  /* Estados de mesa */
+  --table-available: #66BB6A;
+  --table-occupied: #EF5350;
+  --table-reserved: #FF9800;
+  
+  /* Roles */
+  --manager: #7B2CBF;
+  --waiter: #2196F3;
+  --kitchen: #FF5722;
+  
+  /* Bordes y sombras */
+  --border: #E0E0E0;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Tema Oscuro (Dark Theme) */
+.dark {
+  /* Colores de fondo oscuros */
+  --background: #121212; /* Negro suave */
+  --surface: #1E1E1E; /* Gris muy oscuro */
+  --card: #2C2C2C; /* Gris oscuro */
+  
+  /* Colores de texto claros */
+  --foreground: #FFFFFF; /* Blanco */
+  --foreground-secondary: #B0B0B0; /* Gris claro */
+  --foreground-light: #808080; /* Gris medio */
+  
+  /* Colores primarios ajustados para oscuro */
+  --primary: #FF8A5B; /* Naranja más claro */
+  --primary-dark: #FF6B35;
+  --primary-light: #FFA07A;
+  
+  /* Colores secundarios ajustados */
+  --secondary: #5F9B6D; /* Verde más claro */
+  --secondary-dark: #4A7C59;
+  --secondary-light: #7AB587;
+  
+  /* Colores de acento ajustados */
+  --accent: #F7B77D; /* Mostaza más claro */
+  --accent-dark: #F4A261;
+  --accent-light: #FACFA0;
+  
+  /* Estados ajustados */
+  --success: #66BB6A;
+  --warning: #FFB74D;
+  --error: #EF5350;
+  --info: #64B5F6;
+  
+  /* Estados de mesa ajustados */
+  --table-available: #81C784;
+  --table-occupied: #E57373;
+  --table-reserved: #FFB74D;
+  
+  /* Roles ajustados */
+  --manager: #9C4FD9;
+  --waiter: #42A5F5;
+  --kitchen: #FF7043;
+  
+  /* Bordes y sombras oscuros */
+  --border: #404040;
+  --shadow: rgba(0, 0, 0, 0.3);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
   --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-light: var(--foreground-light);
   --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
   --color-secondary: var(--secondary);
+  --color-secondary-dark: var(--secondary-dark);
+  --color-secondary-light: var(--secondary-light);
   --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-accent-light: var(--accent-light);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+  --color-table-available: var(--table-available);
+  --color-table-occupied: var(--table-occupied);
+  --color-table-reserved: var(--table-reserved);
+  --color-manager: var(--manager);
+  --color-waiter: var(--waiter);
+  --color-kitchen: var(--kitchen);
+  --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #121212;
-    --foreground: #ededed;
-    --primary: #FF7043; /* Lighter Orange for Dark Mode */
-    --secondary: #66BB6A; /* Lighter Green */
-    --accent: #FFCA28; /* Lighter Amber */
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

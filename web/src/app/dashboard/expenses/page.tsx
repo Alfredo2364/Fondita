@@ -39,12 +39,13 @@ export default function ExpensesPage() {
     const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await addExpense(
-                parseFloat(amount),
+            await addExpense({
+                restaurantId: 'default_restaurant',
+                amount: parseFloat(amount),
                 description,
-                user?.uid || 'unknown',
-                user?.displayName || user?.email || 'Staff'
-            );
+                registeredBy: user?.uid || 'unknown',
+                registeredByName: user?.displayName || user?.email || 'Staff'
+            });
             setIsModalOpen(false);
             setAmount('');
             setDescription('');
@@ -150,7 +151,7 @@ export default function ExpensesPage() {
                                                 {expense.timestamp?.toDate ? expense.timestamp.toDate().toLocaleDateString() : 'Hoy'}
                                             </span>
                                             <span className="px-2 py-0.5 rounded-md bg-gray-100 dark:bg-zinc-800 text-xs font-bold">
-                                                Por: {expense.userName}
+                                                Por: {expense.registeredByName}
                                             </span>
                                         </div>
                                     </div>

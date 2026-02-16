@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../core/theme/app_theme.dart';
 
 class KitchenDisplayScreen extends StatefulWidget {
   const KitchenDisplayScreen({Key? key}) : super(key: key);
@@ -18,7 +19,7 @@ class _KitchenDisplayScreenState extends State<KitchenDisplayScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cocina'),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: AppColors.kitchen,
       ),
       body: Column(
         children: [
@@ -34,11 +35,11 @@ class _KitchenDisplayScreenState extends State<KitchenDisplayScreen> {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          _buildStatusTab('Pendiente', 'pending', Colors.orange),
+          _buildStatusTab('Pendiente', 'pending', AppColors.warning),
           const SizedBox(width: 8),
-          _buildStatusTab('Cocinando', 'cooking', Colors.blue),
+          _buildStatusTab('Cocinando', 'cooking', AppColors.info),
           const SizedBox(width: 8),
-          _buildStatusTab('Listo', 'ready', Colors.green),
+          _buildStatusTab('Listo', 'ready', AppColors.success),
         ],
       ),
     );

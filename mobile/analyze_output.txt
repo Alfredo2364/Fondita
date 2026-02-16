@@ -1,0 +1,29 @@
+﻿Analyzing mobile...                                             
+
+   info - Unnecessary use of multiple underscores - lib\core\providers\auth_provider.dart:31:16 - unnecessary_underscores
+   info - Statements in an if should be enclosed in a block - lib\core\services\firestore_service.dart:72:9 - curly_braces_in_flow_control_structures
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\auth\login_screen.dart:88:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\auth\login_screen.dart:139:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\auth\login_screen.dart:203:64 - deprecated_member_use
+   info - Statements in an if should be enclosed in a block - lib\features\table\table_detail_screen.dart:74:23 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\table\table_detail_screen.dart:79:23 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\table\table_detail_screen.dart:227:9 - curly_braces_in_flow_control_structures
+   info - Parameter 'key' could be a super parameter - lib\screens\attendance_screen.dart:6:9 - use_super_parameters
+   info - Don't invoke 'print' in production code - lib\screens\attendance_screen.dart:60:7 - avoid_print
+   info - Don't use 'BuildContext's across async gaps - lib\screens\attendance_screen.dart:86:28 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\attendance_screen.dart:94:9 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\attendance_screen.dart:113:28 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\attendance_screen.dart:121:9 - use_build_context_synchronously
+   info - Parameter 'key' could be a super parameter - lib\screens\kitchen_display_screen.dart:5:9 - use_super_parameters
+   info - Unnecessary use of 'toList' in a spread - lib\screens\kitchen_display_screen.dart:198:24 - unnecessary_to_list_in_spreads
+   info - Don't use 'BuildContext's across async gaps - lib\screens\kitchen_display_screen.dart:259:28 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\kitchen_display_screen.dart:267:9 - use_build_context_synchronously
+   info - Parameter 'key' could be a super parameter - lib\screens\qr_scanner_screen.dart:5:9 - use_super_parameters
+  error - The getter 'torchState' isn't defined for the type 'MobileScannerController' - lib\screens\qr_scanner_screen.dart:62:49 - undefined_getter
+  error - The body might complete normally, causing 'null' to be returned, but the return type, 'Widget', is a potentially non-nullable type - lib\screens\qr_scanner_screen.dart:63:48 - body_might_complete_normally
+   info - Parameter 'key' could be a super parameter - lib\screens\tables_screen.dart:5:9 - use_super_parameters
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\tables_screen.dart:98:39 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\tables_screen.dart:99:39 - deprecated_member_use
+   info - Don't use 'BuildContext's across async gaps - lib\screens\tables_screen.dart:261:9 - use_build_context_synchronously
+   info - Don't use 'BuildContext's across async gaps - lib\screens\tables_screen.dart:265:9 - use_build_context_synchronously
+

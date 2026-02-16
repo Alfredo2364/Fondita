@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../core/theme/app_theme.dart';
 
 class AttendanceScreen extends StatefulWidget {
   const AttendanceScreen({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             'checkIn',
             isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay),
           )
-          .where('checkOut', isNull: true)
+          .where('checkOut', isEqualTo: null)
           .limit(1)
           .get();
 
@@ -132,7 +133,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Asistencia'),
-        backgroundColor: Colors.blue,
+        backgroundColor: AppColors.secondary,
       ),
       body: Center(
         child: Padding(
@@ -143,7 +144,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               Icon(
                 _isCheckedIn ? Icons.check_circle : Icons.access_time,
                 size: 120,
-                color: _isCheckedIn ? Colors.green : Colors.grey,
+                color: _isCheckedIn ? AppColors.success : AppColors.textLight,
               ),
               const SizedBox(height: 24),
               Text(
@@ -180,8 +181,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isCheckedIn
-                        ? Colors.orange
-                        : Colors.green,
+                        ? AppColors.warning
+                        : AppColors.success,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),

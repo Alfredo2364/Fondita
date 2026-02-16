@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../core/theme/app_theme.dart';
 
 class TablesScreen extends StatefulWidget {
   const TablesScreen({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _TablesScreenState extends State<TablesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mesas'),
-        backgroundColor: Colors.orange,
+        backgroundColor: AppColors.primary,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
@@ -55,7 +56,7 @@ class _TablesScreenState extends State<TablesScreen> {
               final number = table['number'] ?? 0;
               final capacity = table['capacity'] ?? 0;
               final status = table['status'] ?? 'available';
-              final qrCode = table['qrCode'] ?? '';
+              // final qrCode = table['qrCode'] ?? '';
 
               Color statusColor;
               IconData statusIcon;
@@ -63,17 +64,17 @@ class _TablesScreenState extends State<TablesScreen> {
 
               switch (status) {
                 case 'occupied':
-                  statusColor = Colors.red;
+                  statusColor = AppColors.tableOccupied;
                   statusIcon = Icons.people;
                   statusText = 'Ocupada';
                   break;
                 case 'reserved':
-                  statusColor = Colors.orange;
+                  statusColor = AppColors.tableReserved;
                   statusIcon = Icons.event;
                   statusText = 'Reservada';
                   break;
                 default:
-                  statusColor = Colors.green;
+                  statusColor = AppColors.tableAvailable;
                   statusIcon = Icons.check_circle;
                   statusText = 'Disponible';
               }

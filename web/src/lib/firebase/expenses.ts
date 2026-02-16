@@ -5,22 +5,18 @@ const EXPENSES_COLLECTION = 'expenses';
 
 export interface Expense {
     id?: string;
+    restaurantId: string;
     amount: number;
     description: string;
-    userId: string;
-    userName: string;
+    registeredBy: string;
+    registeredByName: string;
     timestamp: any;
-    restaurantId: string;
 }
 
-export const addExpense = async (amount: number, description: string, userId: string, userName: string) => {
+export const addExpense = async (expense: Omit<Expense, 'id' | 'timestamp'>) => {
     try {
         await addDoc(collection(db, EXPENSES_COLLECTION), {
-            amount,
-            description,
-            userId,
-            userName,
-            restaurantId: 'default_restaurant',
+            ...expense,
             timestamp: serverTimestamp()
         });
     } catch (error) {
