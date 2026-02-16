@@ -7,14 +7,23 @@ DESCRIPCIÓN DEL PROYECTO
 ================================================================================
 
 Fondita es un sistema completo de gestión para restaurantes que incluye:
+- Landing Page profesional con SEO optimizado
 - Aplicación Web (Next.js + Firebase)
 - Aplicación Móvil (Flutter + Firebase)
 - Sistema de autenticación por roles
 - Gestión en tiempo real de mesas, órdenes, inventario y personal
+- Deployment optimizado para múltiples plataformas
 
 El proyecto está diseñado para facilitar la operación diaria de un restaurante,
 permitiendo a gerentes, meseros y personal de cocina trabajar de manera
 coordinada y eficiente.
+
+ACCESO AL SISTEMA:
+------------------
+- Landing Page: https://tuusuario.github.io/fondita/
+- Dashboard Web: https://tuusuario.github.io/fondita/dashboard
+- Firebase Hosting: https://tu-project-id.web.app
+- App Móvil: Disponible para Android e iOS
 
 ================================================================================
 ARQUITECTURA DEL SISTEMA
@@ -29,7 +38,8 @@ PLATAFORMAS:
    - Estado: Zustand
    - Base de datos: Firebase Firestore
    - Autenticación: Firebase Auth
-   - Hosting: Vercel (recomendado)
+   - Hosting: Firebase / GitHub Pages / Vercel
+   - Landing Page: HTML5 + CSS3 puro (SEO optimizado)
 
 2. MOBILE (Flutter)
    - Framework: Flutter
@@ -501,15 +511,82 @@ No se permite su distribución comercial sin autorización previa.
 ================================================================================
 
 Fecha: 16 de Febrero de 2026
-Versión: 2.0.0
+Versión: 3.0.0 - ACTUALIZACIÓN MAYOR
 Estado: Producción
 
-Cambios recientes:
+Cambios recientes (v3.0.0):
+- ✨ Landing Page profesional con SEO optimizado
+- 🚀 Configuración de GitHub Pages con auto-deploy
+- 🔥 Firebase Hosting optimizado con headers de seguridad
+- 🔒 Reglas de seguridad mejoradas (Firestore + Storage)
+- 📊 Índices compuestos para queries eficientes
+- 📝 Documentación completa de deployment (DEPLOYMENT.md)
+- 🎨 Diseño responsive con animaciones suaves
+- 🌐 Meta tags para redes sociales (Open Graph)
+
+Cambios anteriores (v2.0.0):
 - Implementación completa de i18n (ES/EN)
 - Sistema de temas claro/oscuro
 - Pantalla de configuración
 - Paleta de colores profesional
 - Integración en web y mobile
+
+================================================================================
+DEPLOYMENT Y HOSTING
+================================================================================
+
+OPCIONES DE DEPLOYMENT:
+-----------------------
+1. Firebase Hosting (Recomendado)
+   - Comando: firebase deploy --only hosting
+   - URL: https://tu-project-id.web.app
+
+2. GitHub Pages
+   - Auto-deploy con GitHub Actions
+   - URL: https://tuusuario.github.io/fondita/
+
+3. Vercel / Netlify
+   - Deploy con un click
+   - Ver DEPLOYMENT.md para detalles
+
+ARCHIVOS DE CONFIGURACIÓN:
+--------------------------
+- firebase.json: Configuración de hosting y emulators
+- firestore.rules: Reglas de seguridad de base de datos
+- storage.rules: Reglas de seguridad de archivos
+- firestore.indexes.json: Índices para queries
+- .github/workflows/deploy.yml: Auto-deploy a GitHub Pages
+
+Para instrucciones detalladas, consultar DEPLOYMENT.md
+
+================================================================================
+LANDING PAGE
+================================================================================
+
+UBICACIÓN:
+----------
+/web/public/index.html
+
+CARACTERÍSTICAS:
+----------------
+✓ Hero section con CTA
+✓ 8 feature cards animadas
+✓ Tech stack showcase
+✓ Footer completo con enlaces
+✓ SEO optimizado
+✓ Open Graph para redes sociales
+✓ Responsive design
+✓ Animaciones suaves
+✓ Navegación smooth scroll
+
+SECCIONES:
+----------
+1. Header: Logo, navegación y botón de login
+2. Hero: Título impactante con imagen
+3. Features: Características principales
+4. Tech Stack: Tecnologías utilizadas
+5. CTA: Call to action final
+6. Footer: Enlaces y contacto
 
 ================================================================================
                             FIN DE LA DOCUMENTACIÓN

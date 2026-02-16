@@ -1,12 +1,21 @@
 {
-  "name": "web",
-  "version": "0.1.0",
+  "name": "fondita-web",
+  "version": "3.0.0",
+  "description": "Sistema integral de gestión para restaurantes",
+  "author": "Fondita Team",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "export": "next build",
+    "deploy:firebase": "npm run build && firebase deploy --only hosting",
+    "deploy:preview": "npm run build && firebase hosting:channel:deploy preview",
+    "clean": "rm -rf .next out node_modules/.cache",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\""
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -30,5 +39,9 @@
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   }
 }

@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /dashboard/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://tuusuario.github.io/fondita/sitemap.xml
