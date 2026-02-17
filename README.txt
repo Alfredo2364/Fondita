@@ -490,21 +490,97 @@ ERROR: Traducciones no aparecen
 SOLUCIÓN: Verificar que el idioma esté en supportedLocales
 
 ================================================================================
-CONTACTO Y SOPORTE
+                        FONDITA - SISTEMA DE GESTIÓN
+                    Sistema Integral para Restaurantes
 ================================================================================
 
-Proyecto desarrollado para: Universidad Tecnológica Metropolitana
-Curso: Programación Web y Móvil - Quinto Cuatrimestre
-
-Para soporte técnico o consultas sobre el proyecto, contactar al equipo
-de desarrollo.
+VERSIÓN: 3.0.0
+FECHA: Febrero 2026
+AUTOR: Fondita Team
+INSTITUCIÓN: Universidad Tecnológica Metropolitana
 
 ================================================================================
-LICENCIA
+                            TABLA DE CONTENIDOS
 ================================================================================
 
-Este proyecto es de uso académico y está protegido por derechos de autor.
-No se permite su distribución comercial sin autorización previa.
+1. Descripción del Proyecto
+2. Arquitectura del Sistema
+3. Roles y Permisos
+4. Funcionalidades Principales
+5. Sistema de Imágenes (NUEVO)
+6. Estructura del Proyecto
+7. Paleta de Colores
+8. Tecnologías y Dependencias
+9. Instalación y Configuración
+10. Estructura de Base de Datos
+11. Flujos de Trabajo
+12. Características de Seguridad
+13. Características Recientes
+14. Próximas Funcionalidades
+15. Solución de Problemas
+16. Información de Contacto
+
+================================================================================
+                        1. DESCRIPCIÓN DEL PROYECTO
+================================================================================
+
+Fondita es un sistema integral de gestión diseñado específicamente para
+restaurantes modernos. Permite administrar de forma eficiente todos los
+aspectos operativos del negocio, desde la toma de órdenes hasta el control
+de inventario y la gestión de personal.
+
+El sistema está disponible en dos plataformas:
+- Aplicación Web (Next.js) - Para administración desde cualquier navegador
+- Aplicación Móvil (Flutter) - Para meseros y personal en movimiento
+
+CARACTERÍSTICAS DESTACADAS:
+- ✅ Gestión en tiempo real de mesas y órdenes
+- ✅ Control completo de inventario con alertas
+- ✅ Sistema de roles (Admin, Staff, Cocina)
+- ✅ Reportes y analíticas de ventas
+- ✅ Multiidioma (Español/Inglés)
+- ✅ Tema claro y oscuro
+- ✅ Upload de imágenes sin Firebase Storage (NUEVO)
+
+================================================================================
+                        5. SISTEMA DE IMÁGENES (NUEVO)
+================================================================================
+
+FONDITA INCLUYE UN SISTEMA COMPLETO DE UPLOAD DE IMÁGENES SIN NECESIDAD DE
+FIREBASE STORAGE NI BILLING.
+
+CARACTERÍSTICAS:
+- 📤 Upload directo desde la interfaz
+- 🗜️ Compresión automática de imágenes grandes
+- 📊 Soporte para imágenes de hasta 10MB (comprimidas desde 20MB)
+- 🔗 Opción de pegar URLs externas (Imgur, Unsplash, etc.)
+- 👁️ Preview en tiempo real
+- 📈 Barra de progreso durante upload
+- ✅ Validación automática de tipo y tamaño
+
+CÓMO FUNCIONA:
+1. Usuario selecciona imagen desde su computadora
+2. Sistema comprime automáticamente si es necesario
+3. Imagen se sube a Imgur (gratis, permanente)
+4. URL se guarda en Firestore
+5. Imagen se muestra en la app
+
+CONFIGURACIÓN:
+Ver archivo: IMGUR_SETUP.md para instrucciones detalladas
+
+LÍMITES (Plan Gratuito de Imgur):
+- 12,500 uploads por día
+- Tamaño máximo: 20MB (antes de comprimir)
+- Tamaño recomendado: 10MB (después de comprimir)
+- Almacenamiento: Ilimitado
+- Duración: Permanente
+
+ARCHIVOS RELACIONADOS:
+- /web/src/lib/imgurUpload.ts - Servicio de upload
+- /web/src/components/ImageUploader.tsx - Componente React
+- /web/src/app/dashboard/menu/add-example.tsx - Ejemplo de uso
+- IMGUR_SETUP.md - Guía de configuración
+- DATOS_DE_PRUEBA.md - Ejemplos con imágenesa redes sociales (Open Graph)
 
 ================================================================================
 ÚLTIMA ACTUALIZACIÓN

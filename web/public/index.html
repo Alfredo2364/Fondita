@@ -1,28 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Fondita - Sistema integral de gestión para restaurantes. Gestiona mesas, órdenes, inventario y personal en tiempo real.">
+    <meta name="description"
+        content="Fondita - Sistema integral de gestión para restaurantes. Gestiona mesas, órdenes, inventario y personal en tiempo real.">
     <meta name="keywords" content="restaurante, POS, gestión, órdenes, inventario, sistema, punto de venta">
     <meta name="author" content="Fondita Team">
-    
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tudominio.github.io/fondita/">
     <meta property="og:title" content="Fondita - Sistema de Gestión para Restaurantes">
     <meta property="og:description" content="Gestiona tu restaurante de forma eficiente con nuestro sistema integral">
-    <meta property="og:image" content="/og-image.png">
+    <meta property="og:image" content="/logo.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://tudominio.github.io/fondita/">
     <meta property="twitter:title" content="Fondita - Sistema de Gestión para Restaurantes">
     <meta property="twitter:description" content="Gestiona tu restaurante de forma eficiente">
-    <meta property="twitter:image" content="/og-image.png">
+    <meta property="twitter:image" content="/logo.png">
 
     <title>Fondita - Sistema de Gestión para Restaurantes</title>
-    
+
     <style>
         * {
             margin: 0;
@@ -176,8 +185,15 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
         }
 
         /* Features Section */
@@ -368,11 +384,15 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <header>
         <nav>
-            <a href="#" class="logo">🍽️ Fondita</a>
+            <a href="#" class="logo">
+                <img src="/logo.png" alt="Fondita" style="height: 40px; vertical-align: middle; margin-right: 0.5rem;">
+                Fondita
+            </a>
             <ul class="nav-links">
                 <li><a href="#features">Características</a></li>
                 <li><a href="#tech">Tecnología</a></li>
@@ -386,14 +406,16 @@
     <section class="hero">
         <div class="hero-content">
             <h1>Gestiona tu <span class="highlight">Restaurante</span> de Forma Inteligente</h1>
-            <p>Sistema integral para administrar mesas, órdenes, inventario y personal en tiempo real. Aumenta tu eficiencia y mejora la experiencia de tus clientes.</p>
+            <p>Sistema integral para administrar mesas, órdenes, inventario y personal en tiempo real. Aumenta tu
+                eficiencia y mejora la experiencia de tus clientes.</p>
             <div class="hero-buttons">
                 <a href="/login" class="cta-button">Probar Demo</a>
                 <a href="#features" class="secondary-button">Ver Características</a>
             </div>
         </div>
         <div class="hero-image">
-            <img src="/dashboard-preview.png" alt="Dashboard de Fondita" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22%3E%3Crect fill=%22%23FF6B35%22 width=%22600%22 height=%22400%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2224%22 fill=%22white%22%3EDashboard Preview%3C/text%3E%3C/svg%3E'">
+            <img src="/dashboard-preview.png" alt="Dashboard de Fondita"
+                onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22%3E%3Crect fill=%22%23FF6B35%22 width=%22600%22 height=%22400%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2224%22 fill=%22white%22%3EDashboard Preview%3C/text%3E%3C/svg%3E'">
         </div>
     </section>
 
@@ -540,4 +562,5 @@
         });
     </script>
 </body>
+
 </html>
