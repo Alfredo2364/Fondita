@@ -45,6 +45,12 @@ dependencies:
   intl: any
   shared_preferences: ^2.2.2
 
+  # Image upload dependencies
+  image_picker: ^1.0.7
+  flutter_image_compress: ^2.1.0
+  http: ^1.2.0
+  path_provider: ^2.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
